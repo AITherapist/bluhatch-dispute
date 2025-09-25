@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase.auth, fetchProfile]);
+  }, []);
 
   const signUp = async (
     email: string,

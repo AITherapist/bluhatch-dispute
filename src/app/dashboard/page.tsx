@@ -34,18 +34,6 @@ export default function DashboardPage() {
   const [subscriptionLoading, setSubscriptionLoading] = useState(true);
   const router = useRouter();
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
-    }
-  }, [user, loading, router]);
-
-  useEffect(() => {
-    if (user) {
-      fetchSubscriptionStatus();
-    }
-  }, [user]);
-
   const fetchSubscriptionStatus = async () => {
     try {
       const response = await fetch('/api/subscription/status');
@@ -60,6 +48,18 @@ export default function DashboardPage() {
       setSubscriptionLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/login');
+    }
+  }, [user, loading, router]);
+
+  useEffect(() => {
+    if (user) {
+      fetchSubscriptionStatus();
+    }
+  }, [user]);
 
   const handleSubscribe = async () => {
     try {
