@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
 }
 
 async function handleSubscriptionCreated(event: Stripe.Event) {
-  const subscription = event.data.object;
+  const subscription = event.data.object as Stripe.Subscription;
   const customerId = subscription.customer;
 
   console.log('Subscription created:', subscription.id);
@@ -89,7 +89,7 @@ async function handleSubscriptionCreated(event: Stripe.Event) {
 }
 
 async function handleSubscriptionUpdated(event: Stripe.Event) {
-  const subscription = event.data.object;
+  const subscription = event.data.object as Stripe.Subscription;
 
   console.log('Subscription updated:', subscription.id);
 
@@ -116,7 +116,7 @@ async function handleSubscriptionUpdated(event: Stripe.Event) {
 }
 
 async function handleSubscriptionDeleted(event: Stripe.Event) {
-  const subscription = event.data.object;
+  const subscription = event.data.object as Stripe.Subscription;
 
   console.log('Subscription deleted:', subscription.id);
 
@@ -136,7 +136,7 @@ async function handleSubscriptionDeleted(event: Stripe.Event) {
 }
 
 async function handlePaymentSucceeded(event: Stripe.Event) {
-  const invoice = event.data.object;
+  const invoice = event.data.object as Stripe.Invoice;
 
   console.log('Payment succeeded for invoice:', invoice.id);
 
@@ -158,7 +158,7 @@ async function handlePaymentSucceeded(event: Stripe.Event) {
 }
 
 async function handlePaymentFailed(event: Stripe.Event) {
-  const invoice = event.data.object;
+  const invoice = event.data.object as Stripe.Invoice;
 
   console.log('Payment failed for invoice:', invoice.id);
 
@@ -180,12 +180,17 @@ async function handlePaymentFailed(event: Stripe.Event) {
 }
 
 async function handleCheckoutCompleted(event: Stripe.Event) {
-  const session = event.data.object;
+  const session = event.data.object as Stripe.Checkout.Session;
 
   console.log('Checkout completed:', session.id);
 
   // Update user subscription status
   const supabase = createServerClient();
+
+  if (!session.metadata?.user_id) {
+    console.error('No user_id in session metadata');
+    return;
+  }
 
   const { error } = await supabase
     .from('profiles')
