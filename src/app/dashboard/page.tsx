@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useAuth } from '@/lib/auth';
 import {
   Shield,
@@ -275,12 +276,16 @@ export default function DashboardPage() {
             <p className="mb-4 text-gray-600">
               Start documenting a new job for dispute protection.
             </p>
-            <button
-              disabled={!isSubscribed && !isTrialing}
-              className="w-full rounded-lg bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+            <Link
+              href="/jobs/new"
+              className={`block w-full rounded-lg px-4 py-2 text-center text-white transition-colors ${
+                isSubscribed || isTrialing
+                  ? 'bg-green-600 hover:bg-green-700'
+                  : 'cursor-not-allowed bg-gray-400'
+              }`}
             >
               Create New Job
-            </button>
+            </Link>
           </div>
 
           <div className="rounded-lg bg-white p-6 shadow-sm">
@@ -291,12 +296,16 @@ export default function DashboardPage() {
             <p className="mb-4 text-gray-600">
               View and manage your existing jobs.
             </p>
-            <button
-              disabled={!isSubscribed && !isTrialing}
-              className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+            <Link
+              href="/jobs"
+              className={`block w-full rounded-lg px-4 py-2 text-center text-white transition-colors ${
+                isSubscribed || isTrialing
+                  ? 'bg-blue-600 hover:bg-blue-700'
+                  : 'cursor-not-allowed bg-gray-400'
+              }`}
             >
               View Jobs
-            </button>
+            </Link>
           </div>
 
           <div className="rounded-lg bg-white p-6 shadow-sm">
