@@ -43,7 +43,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
       fetchJob();
       fetchEvidence();
     }
-  }, [user, params.id]);
+  }, [user, params.id, fetchJob, fetchEvidence]);
 
   const fetchJob = async () => {
     try {
@@ -75,6 +75,26 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
       console.error('Error fetching evidence:', error);
     } finally {
       setEvidenceLoading(false);
+    }
+  };
+
+  const handleGenerateReport = async () => {
+    try {
+      const response = await fetch(`/api/jobs/${params.id}/report`, {
+        method: 'POST',
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Open report in new tab
+        window.open(data.data.reportUrl, '_blank');
+      } else {
+        alert('Failed to generate report: ' + data.error);
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      alert('Failed to generate report');
     }
   };
 
@@ -374,7 +394,10 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
                   Edit Job
                 </Link>
 
-                <button className="flex w-full items-center rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50">
+                <button
+                  onClick={handleGenerateReport}
+                  className="flex w-full items-center rounded-lg border border-gray-300 px-4 py-2 text-gray-700 hover:bg-gray-50"
+                >
                   <Download className="mr-3 h-5 w-5" />
                   Generate Report
                 </button>
