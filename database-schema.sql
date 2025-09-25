@@ -52,6 +52,18 @@ CREATE TABLE evidence_items (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Create reports table
+CREATE TABLE reports (
+  id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+  job_id UUID REFERENCES jobs(id) ON DELETE CASCADE NOT NULL,
+  format TEXT NOT NULL CHECK (format IN ('html', 'pdf')),
+  content TEXT,
+  file_size INTEGER,
+  download_url TEXT,
+  generated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- Create audit_logs table
 CREATE TABLE audit_logs (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,

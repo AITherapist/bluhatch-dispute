@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
 import { Job, EvidenceItem } from '@/types';
@@ -38,14 +38,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     }
   }, [user, loading, router]);
 
-  useEffect(() => {
-    if (user && params.id) {
-      fetchJob();
-      fetchEvidence();
-    }
-  }, [user, params.id, fetchJob, fetchEvidence]);
-
-  const fetchJob = async () => {
+  const fetchJob = useCallback(async () => {
     try {
       const response = await fetch(`/api/jobs/${params.id}`);
       const data = await response.json();
@@ -61,9 +54,9 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     } finally {
       setJobLoading(false);
     }
-  };
+  }, [params.id, router]);
 
-  const fetchEvidence = async () => {
+  const fetchEvidence = useCallback(async () => {
     try {
       const response = await fetch(`/api/jobs/${params.id}/evidence`);
       const data = await response.json();
@@ -76,7 +69,7 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
     } finally {
       setEvidenceLoading(false);
     }
-  };
+  }, [params.id]);
 
   const handleGenerateReport = async () => {
     try {
@@ -97,6 +90,13 @@ export default function JobDetailPage({ params }: JobDetailPageProps) {
       alert('Failed to generate report');
     }
   };
+
+  useEffect(() => {
+    if (user && params.id) {
+      fetchJob();
+      fetchEvidence();
+    }
+  }, [user, params.id, fetchJob, fetchEvidence]);
 
   if (loading || jobLoading) {
     return (
