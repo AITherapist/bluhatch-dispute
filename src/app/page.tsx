@@ -56,7 +56,7 @@ export default function Home() {
               href="/register"
               className="rounded-lg bg-blue-600 px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-blue-700"
             >
-              Start Free Trial
+              Start 7-Day Free Trial
             </a>
             <a
               href="/login"
@@ -232,10 +232,10 @@ export default function Home() {
               href="/register"
               className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
             >
-              Start Free Trial
+              Start 7-Day Free Trial
             </a>
             <p className="mt-4 text-center text-sm text-gray-600">
-              Less than one hour of legal consultation
+              7-day free trial • Less than one hour of legal consultation
             </p>
           </div>
         </section>

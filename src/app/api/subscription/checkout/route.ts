@@ -38,7 +38,7 @@ export async function POST() {
       );
     }
 
-    // Create Stripe checkout session
+    // Create Stripe checkout session with trial period
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -58,6 +58,9 @@ export async function POST() {
         },
       ],
       mode: 'subscription',
+      subscription_data: {
+        trial_period_days: STRIPE_CONFIG.trialPeriodDays,
+      },
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/pricing?canceled=true`,
       customer_email: user.email,

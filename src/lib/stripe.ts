@@ -13,6 +13,7 @@ export const STRIPE_CONFIG = {
   currency: 'gbp',
   subscriptionInterval: 'month',
   subscriptionAmount: 9900, // £99.00 in pence
+  trialPeriodDays: 7, // 7-day free trial
 } as const;
 
 // Stripe webhook events we handle

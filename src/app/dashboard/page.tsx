@@ -21,6 +21,8 @@ interface SubscriptionStatus {
     status: string;
     current_period_end: string;
     cancel_at_period_end: boolean;
+    trial_start?: string;
+    trial_end?: string;
   } | null;
 }
 
@@ -105,7 +107,22 @@ export default function DashboardPage() {
   }
 
   const isSubscribed = subscription?.subscription_status === 'active';
+  const isTrialing = subscription?.subscription_status === 'trialing';
   const isPastDue = subscription?.subscription_status === 'past_due';
+
+  // Calculate trial days remaining
+  const getTrialDaysRemaining = () => {
+    if (!isTrialing || !subscription?.subscription_details?.trial_end) {
+      return null;
+    }
+    const trialEnd = new Date(subscription.subscription_details.trial_end);
+    const now = new Date();
+    const diffTime = trialEnd.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return Math.max(0, diffDays);
+  };
+
+  const trialDaysRemaining = getTrialDaysRemaining();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -160,9 +177,11 @@ export default function DashboardPage() {
                     ? 'Loading...'
                     : isSubscribed
                       ? 'Active subscription'
-                      : isPastDue
-                        ? 'Payment past due'
-                        : 'No active subscription'}
+                      : isTrialing
+                        ? `Free trial (${trialDaysRemaining} days remaining)`
+                        : isPastDue
+                          ? 'Payment past due'
+                          : 'No active subscription'}
                 </p>
               </div>
             </div>
@@ -171,6 +190,11 @@ export default function DashboardPage() {
                 <div className="flex items-center text-green-600">
                   <CheckCircle className="mr-2 h-5 w-5" />
                   <span className="font-medium">Active</span>
+                </div>
+              ) : isTrialing ? (
+                <div className="flex items-center text-blue-600">
+                  <CheckCircle className="mr-2 h-5 w-5" />
+                  <span className="font-medium">Trial</span>
                 </div>
               ) : isPastDue ? (
                 <div className="flex items-center text-red-600">
@@ -223,12 +247,19 @@ export default function DashboardPage() {
               >
                 Manage Subscription
               </button>
+            ) : isTrialing ? (
+              <button
+                onClick={handleManageSubscription}
+                className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
+              >
+                Manage Subscription
+              </button>
             ) : (
               <button
                 onClick={handleSubscribe}
                 className="rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700"
               >
-                Subscribe Now - £99/month
+                Start Free Trial - 7 Days
               </button>
             )}
           </div>
@@ -245,7 +276,7 @@ export default function DashboardPage() {
               Start documenting a new job for dispute protection.
             </p>
             <button
-              disabled={!isSubscribed}
+              disabled={!isSubscribed && !isTrialing}
               className="w-full rounded-lg bg-green-600 px-4 py-2 text-white transition-colors hover:bg-green-700 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               Create New Job
@@ -261,7 +292,7 @@ export default function DashboardPage() {
               View and manage your existing jobs.
             </p>
             <button
-              disabled={!isSubscribed}
+              disabled={!isSubscribed && !isTrialing}
               className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-gray-400"
             >
               View Jobs
@@ -283,7 +314,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Subscription Required Notice */}
-        {!isSubscribed && (
+        {!isSubscribed && !isTrialing && (
           <div className="mt-8 rounded-lg border border-yellow-200 bg-yellow-50 p-6">
             <div className="flex items-center">
               <AlertCircle className="mr-3 h-6 w-6 text-yellow-600" />
@@ -294,6 +325,25 @@ export default function DashboardPage() {
                 <p className="text-yellow-700">
                   You need an active subscription to access job management and
                   evidence capture features.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Trial Notice */}
+        {isTrialing && (
+          <div className="mt-8 rounded-lg border border-blue-200 bg-blue-50 p-6">
+            <div className="flex items-center">
+              <CheckCircle className="mr-3 h-6 w-6 text-blue-600" />
+              <div>
+                <h3 className="text-lg font-semibold text-blue-800">
+                  Free Trial Active
+                </h3>
+                <p className="text-blue-700">
+                  You have {trialDaysRemaining} days remaining in your free
+                  trial. Your subscription will automatically start after the
+                  trial period.
                 </p>
               </div>
             </div>

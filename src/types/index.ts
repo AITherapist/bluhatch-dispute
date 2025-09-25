@@ -11,7 +11,7 @@ export interface Profile {
   company_name?: string;
   phone?: string;
   address?: string;
-  subscription_status: 'active' | 'cancelled' | 'past_due';
+  subscription_status: 'active' | 'cancelled' | 'past_due' | 'trialing';
   subscription_id?: string;
   created_at: string;
   updated_at: string;
@@ -95,9 +95,11 @@ export interface DisputeProtectionReport {
 
 // Stripe types
 export interface SubscriptionStatus {
-  status: 'active' | 'cancelled' | 'past_due' | 'incomplete';
+  status: 'active' | 'cancelled' | 'past_due' | 'incomplete' | 'trialing';
   current_period_end: string;
   cancel_at_period_end: boolean;
+  trial_start?: string;
+  trial_end?: string;
 }
 
 // OpenTimestamps types

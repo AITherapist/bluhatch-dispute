@@ -37,7 +37,7 @@ export default function RegisterPage() {
     const { error } = await signUp(email, password, companyName);
 
     if (error) {
-      setError(error.message || 'Failed to create account');
+      setError((error as Error).message || 'Failed to create account');
       setLoading(false);
     } else {
       setSuccess(true);

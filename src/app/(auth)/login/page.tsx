@@ -24,7 +24,7 @@ export default function LoginPage() {
     const { error } = await signIn(email, password);
 
     if (error) {
-      setError(error.message || 'Failed to sign in');
+      setError((error as Error).message || 'Failed to sign in');
       setLoading(false);
     } else {
       router.push('/dashboard');
