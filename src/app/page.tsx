@@ -25,12 +25,15 @@ export default function Home() {
               </a>
             </nav>
             <div className="flex space-x-4">
-              <button className="text-gray-600 hover:text-gray-900">
+              <a href="/login" className="text-gray-600 hover:text-gray-900">
                 Sign In
-              </button>
-              <button className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
+              </a>
+              <a
+                href="/register"
+                className="rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+              >
                 Get Started
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -49,12 +52,18 @@ export default function Home() {
             Protect your business from payment disputes.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <button className="rounded-lg bg-blue-600 px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-blue-700">
+            <a
+              href="/register"
+              className="rounded-lg bg-blue-600 px-8 py-4 text-lg font-semibold text-white transition-colors hover:bg-blue-700"
+            >
               Start Free Trial
-            </button>
-            <button className="rounded-lg border border-blue-600 px-8 py-4 text-lg font-semibold text-blue-600 transition-colors hover:bg-blue-50">
-              Watch Demo
-            </button>
+            </a>
+            <a
+              href="/login"
+              className="rounded-lg border border-blue-600 px-8 py-4 text-lg font-semibold text-blue-600 transition-colors hover:bg-blue-50"
+            >
+              Sign In
+            </a>
           </div>
         </div>
 
@@ -219,9 +228,12 @@ export default function Home() {
                 <span className="text-gray-700">Blockchain timestamping</span>
               </li>
             </ul>
-            <button className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition-colors hover:bg-blue-700">
+            <a
+              href="/register"
+              className="block w-full rounded-lg bg-blue-600 py-3 text-center font-semibold text-white transition-colors hover:bg-blue-700"
+            >
               Start Free Trial
-            </button>
+            </a>
             <p className="mt-4 text-center text-sm text-gray-600">
               Less than one hour of legal consultation
             </p>
